@@ -7,6 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { uploadApi } from '@/api/uploadApi';
 import Robot from '../../../public/robot.gif';
+import iconLoading from '../../../public/iconLoading.svg';
 
 interface IDropzoneProps {
   className: string;
@@ -43,12 +44,10 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
       try {
         setIsLoading(true);
         if (fileContent) {
-          // console.log('fileContent', fileContent);
           const payload = { base64Data: fileContent };
           const parsePayload = JSON.stringify(payload);
 
           const res = await uploadApi.postImage(parsePayload);
-          // console.log('res', res);
           setOutPut(res.data.imageBase64);
         }
       } catch (error) {
@@ -80,6 +79,7 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
     setFiles([]);
     // setRejected([]);
     setOutPut('');
+    setFileContent('');
   };
 
   return (
@@ -153,6 +153,7 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
                     onClick={() => {
                       setOutPut('');
                       removeFile(file.name);
+                      setFileContent('');
                     }}
                   >
                     <XMarkIcon className="h-5 w-5 fill-white transition-colors hover:fill-rose-400" />
@@ -178,7 +179,13 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
         </h3>
         <div className="mt-6 flex text-center justify-center">
           {isLoading ? (
-            'loading...'
+            <Image
+              src={iconLoading}
+              alt={'iconLoading'}
+              width={150}
+              height={150}
+              className="bg-[#ffffff]"
+            />
           ) : (
             <Image
               src={outPut ? `data:image/png;base64,${outPut}` : Robot}
