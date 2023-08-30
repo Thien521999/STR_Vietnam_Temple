@@ -7,7 +7,6 @@ import { useDropzone } from 'react-dropzone';
 import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { uploadApi } from '@/api/uploadApi';
 import Robot from '../../../public/robot.gif';
-// import Robot from '../assets/robot.gif';
 
 interface IDropzoneProps {
   className: string;
@@ -58,8 +57,6 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
       setIsLoading(false);
     })();
   }, [fileContent]);
-
-  // console.log('outPut', outPut);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
