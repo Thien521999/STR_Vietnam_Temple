@@ -8,6 +8,7 @@ import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { uploadApi } from '@/api/uploadApi';
 import Robot from '../../../public/robot.gif';
 import iconLoading from '../../../public/iconLoading.svg';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IDropzoneProps {
   className: string;
@@ -82,6 +83,24 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
     setFileContent('');
   };
 
+  const handleDownloadFile = async () => {
+    if (outPut) {
+      try {
+        const response = await fetch(`data:image/png;base64,${outPut}`);
+        const blob = await response.blob();
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `output${uuidv4()}.png`;
+        document.body.appendChild(link);
+        link.click();
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+  };
+
   return (
     <form>
       <div
@@ -112,10 +131,11 @@ export const Dropzone = ({ className }: IDropzoneProps) => {
             Remove all files
           </button>
           <button
-            type="submit"
+            type="button"
+            onClick={handleDownloadFile}
             className="ml-auto mt-1 rounded-md border border-purple-400 px-3 text-[12px] font-bold uppercase tracking-wider text-stone-500 transition-colors hover:bg-purple-400 hover:text-white"
+            disabled={outPut ? false : true}
           >
-            {/* Upload to Cloudinary */}
             Download file
           </button>
         </div>
